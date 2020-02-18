@@ -3,12 +3,32 @@ import './App.css';
 import * as tf from '@tensorflow/tfjs';
 import {useInterval} from "./utils/hooks";
 
-
+const hexToRgb = (hex) => {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16)
+    } : null;
+};
+  
 
 const tensorMapToColor = (t) => {
-    const r = Math.round(255 * t[0] - 0.2 * t[1]);
-    const g = Math.round( 255 * t[2]);
-    const b = Math.round(255 * t[5]  + 0.2 * t[6]);
+    const emotion_map = {
+        0: '#FF0000',
+        1: '#FFFF00',
+        2: '#0000FF',
+    }
+
+    const i = t.indexOf(Math.max(...t));
+    const color = hexToRgb(emotion_map[i])
+
+    console.log(i)
+    console.log(color)
+
+    const r = color.r;
+    const g = color.g;
+    const b = color.b;
 
     return `rgb(${r},${g},${b})`;
 };
@@ -21,8 +41,8 @@ const fetchImage = async () => {
     const img = new Image();
     const urlCreator = window.URL || window.webkitURL;
     img.src = urlCreator.createObjectURL(blob);
-    img.width = 50;
-    img.height = 50;
+    img.width = 54;
+    img.height = 96;
 
     return img;
 };
@@ -31,15 +51,15 @@ const capturePicture = async (videoEl, canvasEl) => {
 
     const ctx = canvasEl.current.getContext('2d');
     //draw image to canvas. scale to target dimensions
-    ctx.drawImage(videoEl.current, 0, 0, 50, 50);
+    ctx.drawImage(videoEl.current, 0, 0, 96, 54);
 
     //convert to desired file format
     const dataurl = canvasEl.current.toDataURL();
 
     const img = new Image();
     img.src = dataurl;
-    img.width = 50;
-    img.height = 50;
+    img.width = 54;
+    img.height = 96;
 
     return img;
 };
