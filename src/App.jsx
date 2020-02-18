@@ -3,36 +3,17 @@ import './App.css';
 import * as tf from '@tensorflow/tfjs';
 import {useInterval} from "./utils/hooks";
 
-const hexToRgb = (hex) => {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16)
-    } : null;
-};
-  
-
 const tensorMapToColor = (t) => {
     const emotion_map = {
         0: '#FF0000',
         1: '#FFFF00',
         2: '#0000FF',
-    }
+    };
 
     const i = t.indexOf(Math.max(...t));
-    const color = hexToRgb(emotion_map[i])
 
-    console.log(i)
-    console.log(color)
-
-    const r = color.r;
-    const g = color.g;
-    const b = color.b;
-
-    return `rgb(${r},${g},${b})`;
+    return emotion_map[i];
 };
-
 
 const fetchImage = async () => {
     const response =  await fetch('https://cors-anywhere.herokuapp.com/https://proxy-0.pen.cbsresidential.net:42091/226508cd38cc42d69d6336f9b43fc022/snap.jpg')
@@ -102,7 +83,6 @@ function App() {
         initializeVideo(videoEl, canvasEl);
     }, []);
 
-    console.log('c', backgroundColor)
     return (
         <div
             className="App"
