@@ -50,9 +50,10 @@ const server = http.createServer((req, res) => {
         res.on('data', function(data) {
             process.stdout.write(data);
         });
+        res.on('err', console.log)
     });
 
-    console.log('color', color, !color,  parseInt(`0x${color}`));
+    console.log('color.', color, !color,  parseInt(`0x${color}`));
 
     const body = JSON.stringify({
         "@type": "colorState",

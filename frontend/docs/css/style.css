@@ -1,0 +1,109 @@
+/* sticky footer */
+* {
+  margin: 0;
+}
+
+#header-theme {
+  transition: all 0.4s linear;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'CMUSansSerifMedium', serif;
+}
+
+.wrapper {
+  min-height: 100%;
+  height: auto !important;
+  height: 100%;
+  margin: 0 auto -5em;
+}
+
+.footer, .push {
+  height: 5em;
+  color: rgba(255,255,255,0.8);
+}
+
+/* center footer */
+.flex-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-item {
+  text-align: center;
+}
+
+/* images */
+#card-item-container {
+  visibility: hidden;
+}
+
+#image-container {
+  position: relative;
+  padding: 10px;
+}
+
+#show-img {
+  max-width: 100%;
+}
+
+.face-frame {
+  border: 2px solid #ff0000;
+  position: absolute;
+}
+
+.canvas-face {
+  display: none;
+}
+.chart-result-profile canvas {
+  border-radius: 50px;
+}
+
+#head-container {
+  font-size: 2.1rem;
+}
+
+#webcam {
+  width: 100%;
+}
+#canvas_webcam {
+  width: 100%;
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+#webcam_frame {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 2px solid #ff0000;
+}
+#btn-share {
+  display: none;
+}
+#btn-manual {
+  display: none;
+}
+.cropper-modal {
+  opacity: 0.05;
+}
+#main-container {
+  font-family: Roboto, sans-serif;
+}
+
+@media only screen and (max-width: 992px) {
+  #head-container {
+    text-align: center;
+    font-size: 1.8rem;
+  }
+}
+
+@media only screen and (max-width: 640px) {
+  #head-container {
+    text-align: center;
+    font-size: 1.5rem;
+  }
+}
