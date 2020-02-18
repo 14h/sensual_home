@@ -33,20 +33,30 @@ const parseReqURL = (url) => {
 const server = http.createServer((req, res) => {
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain');
+    res.setHeader('Access-Control-Allow-Origin', '*')
     const color = parseReqURL(req.url);
-    if(!color) {
-        res.end('please provide a valid color format! e.g: /FFFFFF');
-    }
+    // if(!color) {
+    //     res.end('please provide a valid color format! e.g: /FFFFFF');
+    // }
 
+
+
+
+    if(!color) {
+        res.end('');
+        return;
+    }
     const request = https.request(options, function(res) {
         res.on('data', function(data) {
             process.stdout.write(data);
         });
     });
 
+    console.log('color', color, !color,  parseInt(`0x${color}`));
+
     const body = JSON.stringify({
         "@type": "colorState",
-        "rgb": color
+        "rgb": parseInt(`0x${color}`)
     });
 
     request.write(body);

@@ -1,17 +1,18 @@
+/* global tracking */
 import React, {useEffect, useRef, useState} from 'react';
 import './App.css';
 import * as tf from '@tensorflow/tfjs';
 import {useInterval} from "./utils/hooks";
-import * as tracking from 'tracking';
 
-const TRACKER = new window.tracking.ObjectTracker(['face']);
-TRACKER.setEdgesDensity(0.1);
-TRACKER.setInitialScale(4);
-TRACKER.setStepSize(1);
+
+// TRACKER.setEdgesDensity(0.1);
+// TRACKER.setInitialScale(4);
+// TRACKER.setStepSize(1);
 
 
 
 const tensorMapToColor = (t) => {
+    if (!t) return '#FFF';
     const emotion_map = {
         0: '#FF0000',
         1: '#FFFF00',
@@ -37,29 +38,16 @@ const fetchImage = async () => {
 };
 
 const capturePicture = async (videoEl, canvasEl) => {
+    const ctx = document.getElementById('webcam').getContext('2d');
 
-    const ctx = canvasEl.current.getContext('2d');
-    // var x = rect.x
-    // var y = rect.y;
-    // var w = rect.width;
-    // var h = rect.height;
-    //
-    // var w_w = $(WEBCAM).width();
-    // var w_h = $(WEBCAM).height();
-    // var video_w = WEBCAM.videoWidth;
-    // var video_h = WEBCAM.videoHeight;
-    //
-    // var ratio = video_w / w_w;
-    // //console.log(ratio);
-    //
-    // CANVAS_FACE_CTX.drawImage(WEBCAM, x*ratio, y*ratio, w * ratio, h * ratio, 0, 0, 64, 64);
-    //
+    // const ctx = canvasEl.current.getContext('2d');
 
     //draw image to canvas. scale to target dimensions
-    ctx.drawImage(videoEl.current, 0, 0, 64, 64);
+    console.log(videoEl.current);
+    ctx.drawImage(videoEl.current, 0, 0, 85, 64);
 
     //Convert Image to Greyscale
-    const imageData = ctx.getImageData(0, 0, 64, 64);
+    const imageData = ctx.getImageData(0, 0, 85, 64);
     const data = imageData.data;
     for (let i = 0; i < data.length; i += 4) {
         let avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
@@ -100,17 +88,33 @@ const fetchAnalizeImage = async (videoEl, canvasEl, setBackgroundColor) => {
     // const imagePixels = tf.browser.fromPixels(image);
     // const expandedImage = tf.expandDims(imagePixels);
 
-    const predictionData = await model.predict(preprocess_input(image)).data();
-    setBackgroundColor(tensorMapToColor(predictionData))
+    // const predictionData = await model.predict(preprocess_input(image)).data();
+    const predictionData = null;
+    setBackgroundColor(tensorMapToColor(predictionData));
 
     return predictionData;
 };
 
 const initializeVideo = async (videoEl, canvasEl) => {
+    if (!videoEl.current) {
+        return;
+    }
     const stream = await navigator.mediaDevices.getUserMedia({video: true});
 
     videoEl.current.srcObject = stream;
     videoEl.current.play();
+
+    const webcam = document.getElementById('webcam');
+    console.log(webcam);
+    const webcamCtx = webcam.getContext('2d');
+    webcamCtx.drawImage(
+        videoEl.current,
+        0,
+        0,
+        64,
+        48
+    )
+
 
 }
 
@@ -119,34 +123,17 @@ function App() {
     const canvasEl = useRef(null);
     const [backgroundColor, setBackgroundColor] = useState('#FFF');
 
-    useInterval(() => fetchAnalizeImage(videoEl, canvasEl, setBackgroundColor), 3000)
+    useInterval(() => fetchAnalizeImage(videoEl, canvasEl, setBackgroundColor), 500)
+    const TRACKER = new tracking.ObjectTracker();
+    TRACKER.classifiers = ['faces'];
+    TRACKER.setEdgesDensity(0.1);
+    TRACKER.setInitialScale(4);
+    TRACKER.setStepSize(1);
 
     useEffect(() => {
         initializeVideo(videoEl, canvasEl);
-        // tracking.track('#webcam', TRACKER, { camera: true });
-
-
-
-        // TRACKER.on('track', function(faces) {
-        //
-        //     const rect = faces.data[0];
-        //     console.log(rect)
-        //
-        //     // rect.x = rect.x - EXPAND_BOX.x;
-        //     // rect.y = rect.y - EXPAND_BOX.y;
-        //     // rect.width = rect.width + EXPAND_BOX.w;
-        //     // rect.height = rect.height + EXPAND_BOX.h;
-        //     //
-        //     // drawFaceFrame(rect);
-        //     // cropFace(rect);
-        //     //
-        //     // var result_emotion = getResultEmotion(CANVAS_FACE_GREY);
-        //     // var result_gender = getResultGender(CANVAS_FACE_GREY);
-        //     // updateResultChart(result_emotion, result_gender);
-        // });
 
     }, []);
-
 
 
     return (
@@ -157,7 +144,7 @@ function App() {
                 transition: 'all 0.5s linear'
             }}
         >
-            <video ref={videoEl} />
+            <video ref={videoEl}  />
             <canvas ref={canvasEl} />
         </div>
     );
