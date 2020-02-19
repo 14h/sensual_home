@@ -18,10 +18,10 @@ let emotionColor = 'FFFF00';
 setInterval(() => {
     // set current color
     fetch('http://127.0.0.1:3001/'+emotionColor).then(console.log).catch(console.warn);
-    document.getElementById('header-theme').style.backgroundColor = '#' + emotionColor;
+    document.getElementById('item_block').style.backgroundColor = '#' + emotionColor;
 
     console.log(document.getElementById('header-theme'))
-}, 5000);
+}, 3000);
 
 $(document).ready(function() {
 
@@ -128,9 +128,11 @@ function getEmotionColor(emotion) {
         case 'Sad':
             return '0000FF';
         case 'Surprise':
-            return 'FFFF00';
+            return '6a0dad';
         case 'Neutral':
-            return 'FFF00F';
+            return '000000';
+        case 'Angry':
+            return 'FF0000';
     }
     return 'FFFFFF'
 }

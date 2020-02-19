@@ -5,13 +5,14 @@ const http = require('http');
 const key = fs.readFileSync('cert/shc-bcx-key.pem');
 const cert = fs.readFileSync('cert/shc-bcx-cert.pem');
 
-
+//100ca5b6d
+//10233dc00
 
 const options = {
     hostname: '100.100.197.181',
     port: 8444,
-    path: '/smarthome/devices/hdm:PhilipsHueBridge:HueLight_0017880100ca5d42-0b_001788258049/services/HSBColorActuator/state',
-    method: 'GET',
+    path: '/smarthome/devices/hdm:PhilipsHueBridge:HueLight_001788010233dc00_001788258049/services/HSBColorActuator/state',
+    method: 'PUT',
     strictSSL: false,
     key: key,
     cert: cert,
